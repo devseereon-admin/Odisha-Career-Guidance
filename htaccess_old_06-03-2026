@@ -1,0 +1,45 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# ==========================================
+# 1. ALLOW REAL PHP FILES (AJAX, APIs, forms)
+# ==========================================
+RewriteRule ^count-visitor\.php$ - [L]
+RewriteRule ^(admin|include|uploads|assets)/ - [L]
+
+# ==========================================
+# 2. BLOCK spam & fake PATHS
+# ==========================================
+RewriteRule (^|/)(shop|pg|recruit|shopdetail|product|item|detail)(/|$) - [R=404,L,NC]
+RewriteRule \.(htm|html|asp|jsp|cgi)$ - [R=404,L,NC]
+
+# ==========================================
+# 3. BLOCK spam QUERY STRINGS
+# ==========================================
+RewriteCond %{QUERY_STRING} (shopdetail|\.htm|\.html|\.asp|\.jsp|\.cgi) [NC]
+RewriteRule ^ - [R=404,L]
+
+# ==========================================
+# 4. BLOCK invalid index.php?anything
+# ==========================================
+RewriteCond %{THE_REQUEST} \s/index\.php\? [NC]
+RewriteRule ^index\.php$ - [R=404,L]
+
+# ==========================================
+# 5. Allow real files & folders
+# ==========================================
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# ==========================================
+# 6. Route real site URLs
+# ==========================================
+RewriteRule ^ index.php [L]
+</IfModule>
+
+# ==========================================
+# Custom 404
+# ==========================================
+ErrorDocument 404 /404.php

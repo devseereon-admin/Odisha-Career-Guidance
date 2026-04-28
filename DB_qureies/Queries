@@ -1,0 +1,185 @@
+-- Date-30.03.2026 -- 
+-- English and odia --
+ALTER TABLE my_career_my_identity
+ADD phone VARCHAR(15) NOT NULL DEFAULT '' AFTER email;
+
+-- Date-6.04.2026 --
+-- CREATE TABLE click_tracking (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     category VARCHAR(50),
+--     level1 VARCHAR(50),
+--     level2 VARCHAR(100),
+--     level3 VARCHAR(100),
+--     level4 VARCHAR(100),
+--     clicks INT DEFAULT 1
+-- );
+
+-- Date-6.04.2026 --
+-- CREATE TABLE institution_clicks (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     category VARCHAR(50),
+--     level1 VARCHAR(100),
+--     level2 VARCHAR(100),
+--     level3 VARCHAR(100),
+--     level4 VARCHAR(100),
+--     level5 VARCHAR(100),
+--     level6 VARCHAR(150),
+--     clicks INT DEFAULT 1,
+--     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+-- );
+
+--date-07.04.2026 --
+-- CREATE TABLE entrance_exam_tracking (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+
+--     category VARCHAR(100) NOT NULL,
+--     level1 VARCHAR(100) NOT NULL,
+--     level2 VARCHAR(150) NOT NULL,
+--     level3 VARCHAR(100) NOT NULL,
+--     level4 VARCHAR(150) NOT NULL,
+--     level5 VARCHAR(100) NOT NULL,
+
+--     user_ip VARCHAR(45) NOT NULL,
+--     path_hash CHAR(32) NOT NULL,
+
+--     clicks INT DEFAULT 1,
+
+--     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+--     UNIQUE KEY unique_user_path (user_ip, path_hash)
+-- );
+
+--date -07.04.2026 --
+-- CREATE TABLE scholarship_tracking (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+
+--     category VARCHAR(100) NOT NULL,
+--     level1 VARCHAR(100) NOT NULL,
+--     level2 VARCHAR(150) NOT NULL,
+--     level3 VARCHAR(100) NOT NULL,
+--     level4 VARCHAR(150) NOT NULL,
+--     level5 VARCHAR(100) NOT NULL,
+
+--     user_ip VARCHAR(45) NOT NULL,
+--     path_hash CHAR(32) NOT NULL,
+
+--     clicks INT DEFAULT 1,
+
+--     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+--     UNIQUE KEY unique_user_path (user_ip, path_hash)
+-- );
+
+--date -07.04.2026 --
+
+-- CREATE TABLE career_tracking (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+
+--     category VARCHAR(100) NOT NULL,
+--     level1 VARCHAR(100) NOT NULL,
+--     level2 VARCHAR(150) NOT NULL,
+--     level3 VARCHAR(150) NOT NULL,
+--     level4 VARCHAR(150) NOT NULL,
+
+--     user_ip VARCHAR(45) NOT NULL,
+--     path_hash CHAR(32) NOT NULL,
+
+--     clicks INT DEFAULT 1,
+
+--     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+--     UNIQUE KEY unique_user_path (user_ip, path_hash)
+-- );
+
+--date -07.04.2026 --
+-- CREATE TABLE institution_tracking (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+
+--     category VARCHAR(100) NOT NULL,
+--     level1 VARCHAR(100) NOT NULL,
+--     level2 VARCHAR(150) NOT NULL,
+--     level3 VARCHAR(150) NOT NULL,
+--     level4 VARCHAR(150) NOT NULL,
+--     level5 VARCHAR(150) NOT NULL,
+--     level6 VARCHAR(150) NOT NULL,
+
+--     user_ip VARCHAR(45) NOT NULL,
+--     path_hash CHAR(32) NOT NULL,
+
+--     clicks INT DEFAULT 1,
+
+--     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+--     UNIQUE KEY unique_user_path (user_ip, path_hash)
+-- );
+
+--date -11.04.2026 --
+
+-- CREATE TABLE page_clicks (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     device_id VARCHAR(100),
+--     page_name VARCHAR(100),
+--     ip_address VARCHAR(45),
+--     click_date DATE,
+--     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     UNIQUE KEY unique_click (device_id, page_name, click_date)
+-- );
+
+--date- 11.04.2026 --
+
+-- CREATE TABLE pdf_clicks (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     device_id VARCHAR(50),
+--     ip_address VARCHAR(45),
+--     pdf_name VARCHAR(150),
+--     pdf_category VARCHAR(150),
+--     pdf_file VARCHAR(150),
+--     pdf_path TEXT,
+--     click_date DATE,
+--     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     UNIQUE KEY unique_pdf_click (device_id, pdf_file, click_date)
+-- );
+
+--date - 13.04.2026 --
+
+CREATE TABLE page_clicks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    device_id VARCHAR(100),
+
+    parent_page VARCHAR(100),
+
+    page_url TEXT,
+    page_title VARCHAR(255),
+
+    page_flow JSON,
+
+    ip_address VARCHAR(45),
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+--date -22.04.2026 --
+
+ALTER TABLE my_career_my_identity 
+ADD q1 TEXT AFTER file_name,
+ADD q2 TEXT AFTER q1,
+ADD q3 TEXT AFTER q2,
+ADD q4 TEXT AFTER q3,
+ADD q5 TEXT AFTER q4,
+ADD q6 TEXT AFTER q5;
+
+--date -23.04.2026 --
+ALTER TABLE events 
+ADD report_file VARCHAR(255),
+ADD youtube_link TEXT,
+ADD attendance_link TEXT,
+ADD show_youtube TINYINT(1),
+ADD show_attendance TINYINT(1);
+
+--date -24.04.2-26 --
+
+-- ALTER TABLE page_clicks 
+-- ADD country VARCHAR(100) AFTER ip_address,
+-- ADD state VARCHAR(100) AFTER country,
+-- ADD city VARCHAR(100) AFTER state;

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Mo Career</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+			<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="https://use.fontaweome.com/releases/v5.8.1/css/all.css" >
+		<link rel="stylesheet" href="https://cdjs.cloudflare.com/ajax/libs/font-aesoe/4.0/css/font-awesome.min.css">
+	
+	
+	<script src="js/jquery-3.7.1.js"></script>
+		<script src="js/bootstrap.bundle.min.js"></script>
+		<script src="js/popper.min.js"></script>
+		<script src="js/select2.min.js"></script>
+		<script>
+	$(document).ready(function(){
+		setTimeout(function () {
+		$("#myModal").modal('show');
+         }, 1000);
+	});
+</script>
+	</head>
+	<body>
+	  <div id="myModal" class="modal fade ">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                     <div class="col-md-5 col-4"></div>
+                    <div class="col-md-2 col-4">
+                       	<img src="img/Logo-2.png" class="img-fluid"> 
+                    </div>
+                     <div class="col-md-5 col-4"></div>
+                    <!--<div class="col-md-9 col-9">-->
+                    <!--    <h3>MO CAREER</h3>-->
+                    <!--</div>-->
+                </div>
+                <!--<button type="button" class="close" data-dismiss="modal">×</button>-->
+            </div>
+            <div class="modal-body">
+                <h4>SIGN UP</h4>
+                
+                <form action="/index.html">
+                    <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4 lable-right col-4">
+                        <label>Name:</label>
+                        </div>
+                        <div class="col-md-8 col-8">
+                        <input type="text" class="form-control" name="name" required>
+                        </div>
+                     </div>
+                    </div>
+                   <!--  <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4 lable-right col-4">
+                        <label>Mobile Number:</label>
+                        </div>
+                        <div class="col-md-8 col-8">
+                        <input type="tel" class="form-control" name="mobilenumber" required>
+                        </div>
+                     </div>
+                    </div> -->
+                    <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4 lable-right col-4">
+                        <label>Mobile No/Email:</label>
+                        </div>
+                        <div class="col-md-8 col-8">
+                        <input type="email" class="form-control" name="email">
+                        </div>
+                     </div>
+                    </div>
+                    <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4 lable-right col-4">
+                        <label>District:</label>
+                        </div>
+                        <div class="col-md-8 col-8">
+                        <select class="form-control" name="sellist1" required>
+                            <option> </option>
+                            <option>Khordha</option>
+                            <option>Angul</option>
+                            <option>Boudh</option>
+                            <option>Balangir</option>
+                            <option>Bargarh</option>
+                            <option>Cuttack</option>
+                         </select>
+                        </div>
+                     </div>
+                     </div>
+                    <div class="form-group">
+                     <div class="row">
+                        <div class="col-md-4 lable-right col-4">
+                        <label>Block:</label>
+                        </div>
+                        <div class="col-md-8 col-8">
+                        <select class="form-control" name="sellist2" required>
+                            <optin> </option>
+                            <option>Cuttack Sadar</option>
+                            <option>Baranga</option>
+                            <option>Kantapada</option>
+                            <option>Niali</option>
+                            <option>Tangi</option>
+                            <option>Salipur</option>
+                            <option>Nischintakoili</option>
+                         </select>
+                        </div>
+                     </div>
+                    </div>
+                   
+                    <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4 col-4 lable-right">
+                        <label>Role:</label>
+                        </div>
+                        <div class="col-md-8 col-8">
+                        	<div class="form-check-inline">
+                          <label class="form-check-label" for="radio1">
+                            <input type="radio" class="form-check-input" id="radio1" name="optradio" onclick="showdiv()" value="option1">Student
+                          </label>
+                        </div>
+                        <div class="form-check-inline">
+                          <label class="form-check-label" for="radio2">
+                            <input type="radio" class="form-check-input" id="radio2" name="optradio" onclick="showdiv()" value="option2" required>Teacher
+                          </label>
+                        </div>
+                        <div class="form-check-inline">
+                          <label class="form-check-label" for="radio3">
+                            <input type="radio" class="form-check-input" id="radio3" name="optradio" onclick="hidediv()" value="option3">Parent
+                          </label>
+                        </div>
+                        <div class="form-check-inline">
+                          <label class="form-check-label" for="radio4">
+                            <input type="radio" class="form-check-input" id="radio4" name="optradio" onclick="hidediv()" value="option4">Education Administrator
+                          </label>
+                        </div>
+                        
+                        <div class="form-check-inline">
+                          <label class="form-check-label" for="radio5">
+                            <input type="radio" class="form-check-input" id="radio5" name="optradio" onclick="hidediv()" value="option5">Others
+                          </label>
+                        </div>
+                        </div>
+                     </div>
+                    </div>
+                    <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4 col-4 lable-right">
+                        <label>Gender:</label>
+                        </div>
+                        <div class="col-md-8 col-8">
+                        	<div class="form-check-inline">
+                          <label class="form-check-label" for="radio6">
+                            <input type="radio" class="form-check-input" id="radio6" name="male" value="option6">Female
+                          </label>
+                        </div>
+                        <div class="form-check-inline">
+                          <label class="form-check-label" for="radio7">
+                            <input type="radio" class="form-check-input" id="radio7" name="male" value="option7" required >Male
+                          </label>
+                        </div> 
+                        <div class="form-check-inline">
+                          <label class="form-check-label" for="radio8">
+                            <input type="radio" class="form-check-input" id="radio8" name="male" value="option8">Other
+                          </label>
+                        </div>
+                      
+                        </div>
+                     </div>
+                    </div>
+					
+					<div id="schcontnt">
+                    <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4 col-4 lable-right">
+                        <label>Class:</label>
+                        </div>
+                        <div class="col-md-8 col-8">
+                        <div class="form-check-inline">
+                          <label class="form-check-label" for="radio12">
+                            <input type="radio" class="form-check-input" id="radio12" name="Other" value="option12" required>8th
+                          </label>
+                        </div>
+                        <div class="form-check-inline">
+                          <label class="form-check-label" for="radio8">
+                            <input type="radio" class="form-check-input" id="radio8" name="Other" value="option8" required>9th
+                          </label>
+                        </div>
+                        <div class="form-check-inline">
+                          <label class="form-check-label" for="radio9">
+                            <input type="radio" class="form-check-input" id="radio9" name="Other" value="option9">10th
+                          </label>
+                        </div>
+                        <div class="form-check-inline">
+                          <label class="form-check-label" for="radio10">
+                            <input type="radio" class="form-check-input" id="radio10" name="Other" value="option10">11th
+                          </label>
+                        </div>
+                        <div class="form-check-inline">
+                          <label class="form-check-label" for="radio11">
+                            <input type="radio" class="form-check-input" id="radio11" name="Other" value="option11">12th
+                          </label>
+                        </div>
+                        </div>
+                     </div>
+                    </div>
+ <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4 lable-right col-4">
+                        <label>School Code:</label>
+                        </div>
+                        <div class="col-md-8 col-8">
+                        <input type="text" class="form-control" required >
+                        <br>
+                       
+                        </div>
+                     </div>
+                    </div> 
+
+</div>
+					
+				   <div class="btn-cen">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+        </div>
+<!-- -------------header start---------- -->
+		<section class="top-logo">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-5 col-7 img-one" >
+						<img src="img/Logo-1.png" class="img-fluid">
+					</div>
+					<div class="col-md-3 col-2 img-two">
+						<img src="img/Logo-2.png" class="img-fluid">
+					</div>
+					<div class="col-md-4 col-3 img-three" >
+						<img src="img/Unicef-logo.gif" class="img-fluid">
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class ="bg-pattern header-menubg" >
+			<div class="container">
+			<div class="row">
+			<div class="col-md-10 col-6">
+		
+				<nav class="navbar navbar-expand-md  navbar-dark">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+  						<ul class="navbar-nav me-auto">
+			        		<li class="nav-item">
+						      <a class="nav-link" href="index.html">Home</a>
+						    </li>
+							
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+								Resources
+								</a>
+								<div class="dropdown-menu">
+								<a class="dropdown-item" href="career-collateral.html">Career Collateral</a>
+								<a class="dropdown-item" href="youtube.html">Youtube</a>
+								
+								</div>
+							</li>
+
+
+						    <li class="nav-item">
+						      <a class="nav-link" href="streams.html">Career</a>
+						    </li>
+						    <li class="nav-item">
+						      <a class="nav-link" href="college.php">College</a>
+						    </li>
+						    <li class="nav-item">
+						      <a class="nav-link" href="entrance-exams.php">Entrance Exams</a>
+						    </li>
+						    <li class="nav-item">
+						      <a class="nav-link" href="scholarships.php">Scholarship</a>
+						    </li>
+						   
+						   
+						    <li class="nav-item">
+						      <a class="nav-link" href="feedback.html">Feedback</a>
+						    </li>
+				      	</ul>
+				    </div>
+				</nav> 
+			</div>
+			<div class="col-md-2 col-6">
+				<nav class="navbar navbar-expand-sm navbar-dark">
+			      	<div class="d-flex language">
+			      	<div class="language-en">
+			      		<a href="index.html" class="language-eng">English</a>
+			      	</div>
+			        <div class="language-od">
+			        <a href="od/index.html" class="language-odia">Odia</a>
+			      	</div>
+			      	</div>
+				</nav> 
+			</div>
+			</div>
+			</div>      
+		</section>
+		<!------ header end ------------->
+<div class="home-body-bg" style="background-image: url(img/Bg-low.gif); background-size:cover; background-repeat: no-repeat;">
+<div class="home-body-bg-two" style="background-image: url(img/Butterfly_4.gif);">
+		<section class="home-body-one">
+			<div class="container">
+				<h1 class="heading-one">MO CAREER</h1>
+				<div class="row">
+					<div class="col-md-2"></div>
+				
+						<div class="image-ec-one">
+						<div class="row">
+							<div class="col-md-6 not-padding">
+								<div class="career-image-secone">
+								<img src="img/compressed-home-img-1.jpg" class="img-fluid">
+								<img src="img/Home-img-compr-2.jpg" class="img-fluid">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="career-image-sectwo">
+								<img src="img/compressed-home-img5.jpg" class="img-fluid">
+								<img src="img/compressed-home-img6.jpg" class="img-fluid">	
+								</div>						
+							</div>
+						</div>
+						</div>
+						
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+			</div>
+		</section>
+		<section class="home-body-two">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-1"></div>
+					<div class="col-md-10">
+						<div class="image-ec-two">
+							<div class="row">
+								<div class="col-md-4 ">
+								<div class="tr-ft">
+								<a href="know-yourself.html"><img src="img/wired-outline-268-avatar-man.gif" class="img-fluid" style="height: 26px;"> Know Yourself</a>
+								</div>
+									</div>
+								<div class="col-md-4 ">
+								<div class="tr-ft">
+								  <a href="know-your-career.html"><img src="img/Know-your-Career.gif" class="img-fluid" style="height: 26px;"> Know Your Career</a>
+								</div>
+									</div>
+								<div class="col-md-4 ">
+								<div class="tr-ft">
+								 <a href="my-career-my-identity.html"><img src="img/My-Career-My-Identity.gif" class="img-fluid" style="height: 26px;"> My Career My Identity </a> 
+								</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-1"></div>
+				</div>
+			</div>
+		</section>
+		<section class="home-body-three">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-1"></div>
+					<div class="col-md-10">
+						<div class="image-ec-three">
+							<div class="row">
+								<div class="col-md-3 ">
+								<div class="spinner-one">
+									<div class="item">
+								       <h1 class="count" data-number="150000"> </h1>
+								       <h3 class="text">Students Visited</h3>
+								    </div>
+								</div>
+								</div>
+								<div class="col-md-3">
+								<div class="spinner-two">
+								  <div class="item">
+								       <h1 class="count" data-number="200"> </h1>
+								       <h3 class="text">Entrance Exams</h3>
+								    </div>
+								</div>
+								</div>
+								<div class="col-md-3">
+								<div class="spinner-three">
+								 	<div class="item">
+								       <h1 class="count" data-number="100"> </h1>
+								       <h3 class="text">Careers</h3>
+								    </div>
+								</div>
+								</div>
+								<div class="col-md-3">
+								<div class="spinner-four">
+								 	<div class="item">
+								       <h1 class="count" data-number="30"> </h1>
+								       <h3 class="text">Scolarships</h3>
+								    </div>
+								</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-1"></div>
+				</div>
+			</div>
+		</section>
+		</div>
+		</div>
+		<!-- -------------footer start---------- -->
+		<section class="footer">
+			<div class="container">
+				<div class="row">
+				<div class="col-md-2 col-5"><p>Notifications</p></div>
+				<div class="col-md-10 col-7"><marquee >NEET official notification 2023 by NTA expected to be out by January 4 at <a href="https://neet.nta.nic.in/">http://neet.nta.nic.in</a> | The Post-matric Scholarship for Students with Disabilities is open for applications until January 15, 2024.</marquee></div>
+				</div>
+			</div>
+		</section>
+		<!---------------footer end------------>
+		<script>
+	
+function showdiv(){
+  document.getElementById('schcontnt').style.display ='block';
+}
+function hidediv(){
+  document.getElementById('schcontnt').style.display = 'none';
+}
+	
+	</script>
+		<script>
+			let count = document.querySelectorAll(".count")
+			let arr = Array.from(count)
+			arr.map(function(item){
+			  let startnumber = 0
+			  function counterup(){
+			  startnumber++
+			  item.innerHTML= startnumber
+			   
+			  if(startnumber == item.dataset.number){
+			      clearInterval(stop)
+			  }
+			}
+			let stop =setInterval(function(){
+			  counterup()
+			},4)
+
+			})
+		</script>
+	</body>
+</html>

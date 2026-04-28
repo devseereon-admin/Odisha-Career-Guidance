@@ -1,0 +1,531 @@
+<?php
+include "dbconn.php";
+if (!empty($_POST['action']) && $_POST['action'] == "add") {
+    extract($_POST);
+
+    $has_sub = isset($_POST['has_sub']) ? (int)$_POST['has_sub'] : 0;
+
+    $strm_det = mysqli_fetch_assoc(mysqli_query($conn ,"select * from `catagory` where id='$strm' and status='1' "));
+    $strmname = $strm_det['name'];
+
+    $slug = strtolower($name);
+    $slug = str_replace(' ', '-', $slug);
+    $slug = preg_replace('/[^a-z0-9-]/', '', $slug); // Remove special characters
+
+    $insert = mysqli_query($conn , "
+        INSERT INTO `subcatagory`(`name`, `cat_id`, `cat_name`, `slug`, `has_sub`)  
+        VALUES ('$name', '$strm', '$strmname', '$slug', '$has_sub')
+    ");
+
+    if($insert){
+        // If has_sub = 0 (No), create the PHP file
+        if($has_sub == 0) {
+            $filename = "../" . $slug . ".php"; // Create file outside admin folder
+            
+            $file_content = '<?php 
+include "admin/dbconn.php"; 
+$det_sub = mysqli_query($conn ,"select * from subcatagory where slug=\'' . $slug . '\' and status=\'1\'");
+$res_det = mysqli_fetch_assoc($det_sub);
+$pid = $res_det[\'id\'];
+$subcat_name = $res_det[\'cat_name\'];
+$details = mysqli_fetch_assoc(mysqli_query($conn,"select * from  detail where subcat_id=\'$pid\' and status=\'1\'"));
+
+$about = $details[\'about\'];
+
+?>
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Ama Career</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+			<?php include "include/header_css.php";?>
+	
+	
+		<?php include "include/script.php";?>
+		<script src="admin/assets/plugins/ckeditor/ckeditor.js" type="text/javascript"></script>
+		<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({\'gtm.start\':
+new Date().getTime(),event:\'gtm.js\'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!=\'dataLayer\'?\'&l=\'+l:\'\';j.async=true;j.src=
+\'https://www.googletagmanager.com/gtm.js?id=\'+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,\'script\',\'dataLayer\',\'GTM-K43FK2HL\');</script>
+<!-- End Google Tag Manager -->
+
+	</head>
+	<body>
+	    <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K43FK2HL"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+			<!-- -------------header start---------- -->
+		<!--<section class="top-logo">-->
+		<!--	<div class="container">-->
+		<!--		<div class="row">-->
+		<!--			<div class="col-md-4 col-8 img-one" >-->
+		<!--				<img src="img/Logo-1.png" class="img-fluid">-->
+		<!--			</div>-->
+		<!--			<div class="col-md-4 col-2 img-two">-->
+		<!--				<img src="img/Logo-2.png" class="img-fluid">-->
+		<!--			</div>-->
+		<!--			<div class="col-md-4 col-2 img-three" >-->
+		<!--				<img src="img/Unicef-logo.gif" class="img-fluid">-->
+		<!--			</div>-->
+		<!--		</div>-->
+		<!--	</div>-->
+		<!--</section>-->
+				<section class="top-logo">
+			<div class="container">
+				<?php include "include/top_bar.php";?>
+			</div>
+		</section>
+		<section class ="bg-pattern header-menubg" >
+			<div class="container">
+			<div class="row">
+			<div class="col-md-10 col-6">
+				<?php include "include/nav_menu.php";?> 
+			</div>
+			
+			</div>
+			<div class="col-md-2 col-6">
+				<nav class="navbar navbar-expand-sm navbar-dark">
+			      	<div class="d-flex language">
+			      	<div class="language-en">
+			      		<a href="' . $slug . '.php" class="language-eng">English</a>
+			      	</div>
+			        <div class="language-od">
+			        <a href="od/#" class="language-odia">ଓଡିଆ</a>
+			      	</div>
+			      	</div>
+				</nav> 
+			</div>
+			</div>      
+		</section>
+		<!------ header end ------------->
+		 <div class="headingbnner" >
+		   
+		      <div class="row">
+		          <div class="col-md-6" style="text-align:right;">
+		              <img src="banner-image/<?=$details[\'banner\'];?>" style="width:300px;height:300px;">
+		          </div>
+		          <div class="col-md-6" style="text-align:left;padding-top:100px;">
+		            
+		               <h2 class="heading-one-two">CAREERS IN</h2>
+				<h1 class="heading-one"><?=$subcat_name;?></h1>
+		          </div>
+		      </div>
+				</div>
+		<section class="psephologist-one">
+			<div class="container">
+				<!--<h2 class="heading-one-two">CAREER IN</h2>-->
+				<!--<h1 class="heading-one"><//?=$subcat_name;?></h1>-->
+				
+				<div class="row">
+					<div class="col-md-3" >
+						<div class="search-btn">
+					    <form action="/action_page.php">
+					      <input type="text" placeholder="Search.." name="search">
+					      <button type="submit"><i class="fa fa-search"></i></button>
+					    </form>
+					  	</div>
+					  	<div class="heading-psephologist">
+					  		<h3><?=$res_det[\'name\'];?></h3>
+					  	</div>
+					</div>
+					<div class="col-md-9 border-psepho" >
+							<!-- Nav tabs -->
+						  <ul class="nav nav-tabs" role="tablist">
+						    <li class="nav-item">
+						      <a class="nav-link active" data-toggle="tab" href="#home">About</a>
+						    </li>
+						    <li class="nav-item">
+						      <a class="nav-link" data-toggle="tab" href="#menu1">Road Map</a>
+						    </li>
+						    <li class="nav-item">
+						      <a class="nav-link" data-toggle="tab" href="#menu3">Colleges</a>
+						    </li>
+						    <li class="nav-item">
+						      <a class="nav-link" data-toggle="tab" href="#menu2">Entrance Exams</a>
+						    </li>
+						    <li class="nav-item">
+						      <a class="nav-link" data-toggle="tab" href="#menu4">Scholarships</a>
+						    </li>
+						    <li class="nav-item">
+						      <a class="nav-link" data-toggle="tab" href="#menu5">Entrepreneurship</a>
+						    </li>
+						    <li class="nav-item">
+						      <a class="nav-link" data-toggle="tab" href="#menu6">For The Differently Abled</a>
+						    </li>
+						  </ul>
+
+						  <!-- Tab panes -->
+						  <div class="tab-content">
+						    <div id="home" class="contaner tab-pane active"><br>
+						      <div class="row">
+						      	<div class="col-md-12">
+						      		<div class="psefology-skill-spea">
+						      		<h3 class="hading-for-tab"><?=$res_det[\'name\'];?></h3>
+						      		<p><?=$details[\'about\'];?></p>
+						      		<img src="about-image/<?=$details[\'aboiut_img\'];?>" class="img-fluid">
+						      		<h5>SKILLS REQUIRED:</h5>
+						      		<?=$details[\'skill_required\'];?>
+						      	
+						      		<h5>SUCCESS STORY	</h5>
+						      		<div class="row yogendra-head">
+						      				<a href="#"><img src="successtory-image/<?=$details[\'success_strimg\'];?>" style="border-radius: 100px; width:100px;" class="img-fluid"></a>
+						      			
+						      			<div class="col-md-10 col-9">
+						      				<p class="Yogendra-heading" ><b><?=$details[\'sucees_stitle\'];?></b></p>
+						      			</div>
+						      		</div>
+										 <?=$details[\'success_cont\'];?>
+										 <br>
+										 <a href="<?=$details[\'success_slink\'];?>" class="color-btn" target="blank">
+						                 Source</a><br><br>
+						      		<div class="row you-tube-channel">
+						      			<div class="col-md-1 col3">
+						      				<a href="https://youtube.com/@odishacareerguidanceportal8840?si=ZUssJpgdl4SxSeMS"><img src="img/free-youtube-logo-icon-2431-thumb.png" width="50px" class="img-fluid"></a>
+						      			</div>
+						      			<div class="col-md-11 col-9">
+						      				<p style="padding-top: 6px;"><b>For More Information , Visit Our Youtube Channel</b></p>
+						      			</div>
+						      		</div>
+						      	</div>
+						      	</div>
+						    
+						      </div>
+						    </div>
+						    <div id="menu1" class="contaner tab-pane fade"><br>
+						     <img src="roadmap-image/<?=$details[\'road_map\'];?>" class="img-fluid">
+						    </div>
+							 <div id="menu2" class="container tab-pane fade"><br>
+						      <h3 class="heading-for-tab">Entrance Exams</h3>
+						     <!-- <h5><u>Entrance Exams Odisha</u></h5>-->
+						     <!--<?=$details[\'enxm_od\'];?>-->
+						      <h5><u>Entrance Exams India</u></h5>
+						     <?=$details[\'enxm_in\'];?>
+						      
+						    </div>
+							
+						    
+								<div id="menu3" class="container tab-pane fade"><br>
+						     <h3 class="heading-for-tab">Colleges</h3>
+						     <h5><u>Colleges in Odisha</u></h5>
+						    <?=$details[\'clg_od\'];?>
+						      <h5><u>Colleges in India</u></h5>
+						       <?=$details[\'clg_in\'];?>
+						      <!--<h5><u>Colleges Abroad </u></h5>-->
+						      <!--<?=$details[\'clg_ab\'];?>-->
+						    </div>
+							
+						   
+						    
+							 <div id="menu4" class="container tab-pane fade"><br>
+						      <h3 class="heading-for-tab">Scholarship</h3>
+						      <h5><u>Scholarship in Odisha</u></h5><br>
+						     <?=$details[\'schlr_od\'];?>
+						      <h5><u>Scholarship in India</u></h5><br>
+						       <?=$details[\'schlr_national\'];?>
+						    </div>
+						   
+							  <div id="menu5" class="container tab-pane fade"><br>
+						      <h3 class="heading-for-tab">Entrepreneurship</h3>
+							  <?=$details[\'enterprener\'];?>
+						     <!--<h5>SUCCESS STORY	</h5>-->
+						     <!-- 		 <div class="row yogendra-head">-->
+						     <!-- 				<a href="#"><img src="successtory-image/<?=$details[\'enterpre_succ_img\'];?>" style="border-radius: 100px; width:100px;" class="img-fluid"></a>-->
+						      			
+						     <!-- 			<div class="col-md-10 col-9">-->
+						     <!-- 				<p class="Yogendra-heading" ><b> <?=$details[\'enterpre_succ_titl\'];?></b></p>-->
+						     <!-- 			</div>-->
+						     <!-- 		</div> 	-->
+										 <!--<?=$details[\'enterpre_succ_con\'];?><br><br>-->
+										 <!--<a href=<?=$details[\'enterpre_succ_source\'];?>" class="color-btn" target="blank">-->
+						     <!--            Source</a><br><br>-->
+						    </div>
+							 
+						    <div id="menu6" class="container tab-pane fade"><br>
+						      <?=$details[\'differenty_abled\'];?>
+						    </div>
+						  </div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- -------------footer start---------- -->
+		<?php include "include/before-footer.php";?>
+		<!---------------footer end------------>
+	</body>
+</html>';
+            
+            // Write the file
+            if(file_put_contents($filename, $file_content)) {
+                $msg = "subcatagory added and file created successfully";
+                $alert = "success";
+            } else {
+                $msg = "subcatagory added but file creation failed";
+                $alert = "warning";
+            }
+        } else {
+            $msg = "subcatagory added";
+            $alert = "success";
+        }
+    } else {
+        $msg = "Unable to add subcatagory";
+        $alert = "danger";
+    }
+
+    header("Location: croption.php");
+}
+?>
+
+<!DOCTYPE html>
+<html class=" ">
+    <head>
+        <!-- 
+         * @Package: Ultra Admin - Responsive Theme
+         * @Subpackage: Bootstrap
+         * @Version: B4-1.3
+         * This file is part of Ultra Admin Theme.
+        -->
+        <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+        <meta charset="utf-8" />
+        <title>Ama Career Admin</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta content="" name="description" />
+        <meta content="" name="author" />
+
+        <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon" />    <!-- Favicon -->
+        <link rel="apple-touch-icon-precomposed" href="assets/images/apple-touch-icon-57-precomposed.png">	<!-- For iPhone -->
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/images/apple-touch-icon-114-precomposed.png">    <!-- For iPhone 4 Retina display -->
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/images/apple-touch-icon-72-precomposed.png">    <!-- For iPad -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/images/apple-touch-icon-144-precomposed.png">    <!-- For iPad Retina display -->
+
+
+
+
+        <!-- CORE CSS FRAMEWORK - START -->
+        <link href="assets/plugins/pace/pace-theme-flash.css" rel="stylesheet" type="text/css" media="screen"/>
+        <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="assets/fonts/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css"/>
+        <link href="assets/css/animate.min.css" rel="stylesheet" type="text/css"/>
+        <link href="assets/plugins/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" type="text/css"/>
+        <!-- CORE CSS FRAMEWORK - END -->
+
+        <!-- OTHER SCRIPTS INCLUDED ON THIS PAGE - START --> 
+        <link href="assets/plugins/datatables/css/datatables.min.css" rel="stylesheet" type="text/css" media="screen"/>   
+        <link href="assets/plugins/icheck/skins/all.css" rel="stylesheet" type="text/css" media="screen"/>
+		<!-- OTHER SCRIPTS INCLUDED ON THIS PAGE - END --> 
+
+
+        <!-- CORE CSS TEMPLATE - START -->
+        <link href="assets/css/style.css" rel="stylesheet" type="text/css"/>
+        <link href="assets/css/responsive.css" rel="stylesheet" type="text/css"/>
+        <!-- CORE CSS TEMPLATE - END -->
+
+    </head>
+    <!-- END HEAD -->
+
+    <!-- BEGIN BODY -->
+    <body class=" "><!-- START TOPBAR -->
+        <div class='page-topbar '>
+            <div class='logo-area'>
+
+            </div>
+
+        </div>
+        <!-- END TOPBAR -->
+        <!-- START CONTAINER -->
+        <div class="page-container row-fluid">
+
+            <!-- SIDEBAR - START -->
+            <div class="page-sidebar ">
+
+                <!-- MAIN MENU - START -->
+                <div class="page-sidebar-wrapper" id="main-menu-wrapper"> 
+                <?php include "admcommon/side-menu.php"; ?>
+                    
+
+                </div>
+                <!-- MAIN MENU - END -->
+
+
+
+                <div class="project-info"></div>
+            </div>
+            <!--  SIDEBAR - END -->
+            <!-- START CONTENT -->
+            <section id="main-content" class=" ">
+                <section class="wrapper main-wrapper" style=''>
+
+                    <div class='col-xl-12 col-lg-12 col-md-12 col-12'>
+                        <div class="page-title">
+
+                            <div class="float-left">
+                                <h1 class="title">Career</h1>                            </div>
+
+                            <div class="float-right d-none">
+                                <ol class="breadcrumb">
+                                    <li>
+                                        <a href="index.html"><i class="fa fa-home"></i>Home</a>
+                                    </li>
+                                    <li>
+                                        <a href="tables-basic.html">Tables</a>
+                                    </li>
+                                    <li class="active">
+                                        <strong>Data Tables</strong>
+                                    </li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="col-xl-12 col-lg-12 col-12 col-md-12">
+                        <section class="box ">
+                            <header class="panel_header">
+                                <h2 class="title float-left">Add Career</h2>
+                                <div class="actions panel_actions float-right">
+                                    <i class="box_toggle fa fa-chevron-down"></i>
+                                    <i class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></i>
+                                    <i class="box_close fa fa-times"></i>
+                                </div>
+                            </header>
+                            <div class="content-body">
+                                <div class="row">
+                                    <div class="col-lg-8 col-md-9 col-10">
+									<form name="careerfrm" method="post" action="add_creer.php" enctype="multipart/form-data">
+									<input type="hidden" name="action" value="add">
+                                        <div class="form-group">
+                                            <label class="form-label" for="field-1">Name</label>
+                                            
+                                            <div class="controls">
+                                                <input type="text" class="form-control" id="field-1" name="name">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="form-label" for="field-2">stream</label>
+                                           
+                                             <select class="custom-select" id="inputGroupSelect01" name="strm">
+                                                <option selected>Choose...</option>
+												<?php
+												$strm_sql = mysqli_query($conn , "select * from catagory where status='1'");
+												while($resstrm = mysqli_fetch_array($strm_sql)){
+												?>
+                                                <option value="<?=$resstrm['id'];?>"><?=$resstrm['name'];?></option>
+												<?php
+												}
+												?>
+                                               
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Create Sub Category?</label>
+                                            <div class="controls">
+                                                <label>
+                                                    <input type="radio" name="has_sub" value="1"> Yes
+                                                </label>
+                                                &nbsp;&nbsp;
+                                                <label>
+                                                    <input type="radio" name="has_sub" value="0" checked> No
+                                                </label>
+                                            </div>
+                                        </div>
+
+										<button type="submit" value="submit" class="btn btn-success btn-corner">Submit</button>
+									</form>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </section>
+                    </div>
+                  
+
+                  
+                </section>
+            </section>
+            <!-- END CONTENT -->
+
+
+            <div class="chatapi-windows ">
+
+
+            </div>    </div>
+        <!-- END CONTAINER -->
+        <!-- LOAD FILES AT PAGE END FOR FASTER LOADING -->
+
+
+        <!-- CORE JS FRAMEWORK - START --> 
+        <script src="assets/js/jquery-3.4.1.min.js" type="text/javascript"></script> 
+        <script src="assets/js/popper.min.js" type="text/javascript"></script> 
+        <!-- <script src="assets/js/jquery.easing.min.js" type="text/javascript"></script>  -->
+        <script src="assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script> 
+        <script src="assets/plugins/pace/pace.min.js" type="text/javascript"></script>  
+
+        <script src="assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js" type="text/javascript"></script> 
+        <script src="assets/plugins/viewport/viewportchecker.js" type="text/javascript"></script>  
+        <!-- CORE JS FRAMEWORK - END --> 
+
+
+        <!-- OTHER SCRIPTS INCLUDED ON THIS PAGE - START --> 
+        <script src="assets/plugins/datatables/js/dataTables.min.js" type="text/javascript"></script>
+		<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js">
+        </script>
+        
+        <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">
+        </script>
+        <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js">
+        </script>
+        <script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js">
+        </script>
+        <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js">
+        </script>
+        <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js">
+        </script> <!-- OTHER SCRIPTS INCLUDED ON THIS PAGE - END --> 
+
+
+        <!-- CORE TEMPLATE JS - START --> 
+        <script src="assets/js/scripts.js" type="text/javascript"></script> 
+        <!-- END CORE TEMPLATE JS - END --> 
+
+        <!-- Sidebar Graph - START --> 
+        <script src="assets/plugins/sparkline-chart/jquery.sparkline.min.js" type="text/javascript"></script>
+        <script src="assets/js/chart-sparkline.js" type="text/javascript"></script>
+        <!-- Sidebar Graph - END --> 
+
+
+        <!-- General section box modal start -->
+        <div class="modal" id="section-settings" tabindex="-1" role="dialog" aria-labelledby="ultraModal-Label" aria-hidden="true">
+            <div class="modal-dialog animated bounceInDown">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Section Settings</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        Body goes here...
+
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
+                        <button class="btn btn-success" type="button">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal end -->
+    </body>
+</html>
+
+
+
