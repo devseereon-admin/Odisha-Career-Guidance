@@ -183,3 +183,14 @@ ADD show_attendance TINYINT(1);
 -- ADD country VARCHAR(100) AFTER ip_address,
 -- ADD state VARCHAR(100) AFTER country,
 -- ADD city VARCHAR(100) AFTER state;
+
+--date - 28.04.26 --
+ALTER TABLE events 
+CONVERT TO CHARACTER SET utf8 
+COLLATE utf8_general_ci;
+
+--date - 28.04.26 --
+ALTER TABLE events 
+MODIFY event_name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci,
+MODIFY description TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
+MODIFY location VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci;

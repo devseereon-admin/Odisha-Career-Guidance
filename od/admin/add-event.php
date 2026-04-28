@@ -1,6 +1,8 @@
 <?php
 include "dbconn.php";
 
+require_once('check-validate.php');
+
 /* ---------- SELECT DATABASE ---------- */
 mysqli_select_db($conn, "ama_career_odia");
 
@@ -247,7 +249,17 @@ WHERE id='$id'");
 
 <head>
 
-    <meta charset="utf-8">
+     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+      <meta charset="utf-8" />
+
+    <title>Ama Career Admin</title>
+
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+      <meta content="" name="description" />
+
+      <meta content="" name="author" />
     <title>Ama Career - Add Event</title>
 
     <!-- CORE CSS -->
@@ -432,7 +444,7 @@ WHERE id='$id'");
     <input type="file" name="report_file" class="form-control">
 
     <?php if(!empty($event['report_file'])){ ?>
-        <a href="..od/upload/events/reports/<?= $event['report_file'] ?>" target="_blank">
+        <a href="../od/upload/events/reports/<?= $event['report_file'] ?>" target="_blank">
             View Current Report
         </a>
     <?php } ?>
