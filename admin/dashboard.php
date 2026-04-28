@@ -1514,7 +1514,7 @@ while ($row = $scholarship_result->fetch_assoc()) {
      AND JSON_EXTRACT(page_flow, '$jsonIndex') IS NOT NULL
      GROUP BY name, country, state, city
      ORDER BY total_clicks DESC
-");
+          ");
 
             while ($row = $result->fetch_assoc()) {
 
@@ -1590,7 +1590,7 @@ while ($row = $scholarship_result->fetch_assoc()) {
     GROUP BY name
     ORDER BY total_clicks DESC
     ");
-  while ($row = $result->fetch_assoc()) {
+   while ($row = $result->fetch_assoc()) {
 
             if (!empty($row['name'])) {
                 $data[$parent][] = [
@@ -1634,7 +1634,7 @@ while ($row = $scholarship_result->fetch_assoc()) {
     // ============================
     // 📄 ARTICLES (PDF CLICK)
     // ============================
-  $result = $this->conn->query("
+    $result = $this->conn->query("
     SELECT 
         JSON_UNQUOTE(JSON_EXTRACT(page_flow, '$[1]')) AS name,
         COUNT(*) as total_clicks
@@ -1643,7 +1643,7 @@ while ($row = $scholarship_result->fetch_assoc()) {
     AND TRIM(LOWER(JSON_UNQUOTE(JSON_EXTRACT(page_flow, '$[0]')))) = 'career collateral'
     GROUP BY name
     ORDER BY total_clicks DESC
-  ");
+    ");
 
     while ($row = $result->fetch_assoc()) {
         if (!empty($row['name'])) {
