@@ -987,4 +987,8 @@ span.avatar figure {
     width: 70%;
     margin-left:20px ;
   }
+    .video-box iframe {
+    width: 360px !important;
+    height: 316px;
+}
 }
