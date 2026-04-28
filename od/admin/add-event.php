@@ -432,7 +432,7 @@ WHERE id='$id'");
     <input type="file" name="report_file" class="form-control">
 
     <?php if(!empty($event['report_file'])){ ?>
-        <a href="../upload/events/reports/<?= $event['report_file'] ?>" target="_blank">
+        <a href="..od/upload/events/reports/<?= $event['report_file'] ?>" target="_blank">
             View Current Report
         </a>
     <?php } ?>

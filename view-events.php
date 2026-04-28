@@ -527,7 +527,7 @@ if (!$event) {
                 <div class="mt-3 mb-3 reports-btn ">
                     <!-- REPORT -->
                     <?php if (!empty($event['report_file'])) { ?>
-                        <a href="upload/events/reports<?= $event['report_file'] ?>"
+                        <a href="upload/events/reports/<?= $event['report_file'] ?>"
                             class="btn btn-primary" target="_blank">
                             Get Details
                         </a>

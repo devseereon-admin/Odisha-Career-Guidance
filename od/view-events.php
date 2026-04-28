@@ -224,7 +224,7 @@ $event = mysqli_fetch_assoc($query);
                 <!-- BUTTONS -->
                 <div class="mt-3 mb-3 reports-btn">
                     <?php if (!empty($event['report_file'])) { ?>
-                        <a href="upload/events/reports/<?= $event['report_file'] ?>"
+                        <a href="../od/od/upload/events/reports/<?= $event['report_file'] ?>"
                             class="btn btn-primary btn-sm text-nowrap px-2">
                             Get Details
                         </a>
