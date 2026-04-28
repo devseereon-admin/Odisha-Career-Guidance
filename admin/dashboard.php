@@ -1500,21 +1500,17 @@ while ($row = $scholarship_result->fetch_assoc()) {
 
         foreach ($mapping as $type => $jsonIndex) {
 
-           $result = $this->conn->query("
-       SELECT 
-        JSON_UNQUOTE(JSON_EXTRACT(page_flow, '$jsonIndex')) AS name,
-        country,
-        state,
-        city,
-        COUNT(*) as total_clicks
-     FROM page_clicks
-     WHERE page_url = 'entrance-exams.php'
-     AND JSON_UNQUOTE(JSON_EXTRACT(page_flow, '$[0]')) 
-        IN ('Post Graduate','Under Graduate','Competitive exam for job')
-     AND JSON_EXTRACT(page_flow, '$jsonIndex') IS NOT NULL
-     GROUP BY name, country, state, city
-     ORDER BY total_clicks DESC
-          ");
+            $result = $this->conn->query("
+                SELECT 
+                    JSON_UNQUOTE(JSON_EXTRACT(page_flow, '$jsonIndex')) AS name,
+                    COUNT(*) as total_clicks
+                FROM page_clicks
+                WHERE page_url = 'entrance-exams.php'
+               AND JSON_UNQUOTE(JSON_EXTRACT(page_flow, '$[0]')) IN ('Post Graduate','Under Graduate','Competitive exam for job')
+                AND JSON_EXTRACT(page_flow, '$jsonIndex') IS NOT NULL
+                GROUP BY name
+                ORDER BY total_clicks DESC
+            ");
 
             while ($row = $result->fetch_assoc()) {
 
@@ -1549,7 +1545,7 @@ while ($row = $scholarship_result->fetch_assoc()) {
 
             -- ✅ EXCLUDE THESE PARENT FLOWS
             AND LOWER(JSON_UNQUOTE(JSON_EXTRACT(page_flow, '$[0]'))) 
-                NOT IN ('scholarship', 'persona_selection')
+                NOT IN ('scholarship', 'persona_selection','Accessibility')
 
             AND JSON_EXTRACT(page_flow, '$jsonIndex') IS NOT NULL
             GROUP BY name
@@ -1590,7 +1586,7 @@ while ($row = $scholarship_result->fetch_assoc()) {
     GROUP BY name
     ORDER BY total_clicks DESC
     ");
-   while ($row = $result->fetch_assoc()) {
+ while ($row = $result->fetch_assoc()) {
 
             if (!empty($row['name'])) {
                 $data[$parent][] = [
@@ -1605,7 +1601,7 @@ while ($row = $scholarship_result->fetch_assoc()) {
 
     return $data;
   }
-   if ($formType === 'resource') {
+ if ($formType === 'resource') {
 
     // ============================
     // 🎥 YOUTUBE (INDEX 2)
@@ -1634,7 +1630,7 @@ while ($row = $scholarship_result->fetch_assoc()) {
     // ============================
     // 📄 ARTICLES (PDF CLICK)
     // ============================
-    $result = $this->conn->query("
+  $result = $this->conn->query("
     SELECT 
         JSON_UNQUOTE(JSON_EXTRACT(page_flow, '$[1]')) AS name,
         COUNT(*) as total_clicks
@@ -1643,7 +1639,7 @@ while ($row = $scholarship_result->fetch_assoc()) {
     AND TRIM(LOWER(JSON_UNQUOTE(JSON_EXTRACT(page_flow, '$[0]')))) = 'career collateral'
     GROUP BY name
     ORDER BY total_clicks DESC
-    ");
+ ");
 
     while ($row = $result->fetch_assoc()) {
         if (!empty($row['name'])) {
@@ -1680,9 +1676,9 @@ while ($row = $scholarship_result->fetch_assoc()) {
     }
 
     return $data;
-  }
+}
 
-   if ($formType === 'career') {
+if ($formType === 'career') {
 
     // ============================
     // 🎓 CAREER PATH (FLOW)
@@ -1754,7 +1750,7 @@ while ($row = $scholarship_result->fetch_assoc()) {
     }
 
     return $data;
-  }
+}
     // ✅ DEFAULT (unchanged)
      $result = $this->conn->query("
         SELECT click_type, item_name, SUM(click_count) as total_clicks
@@ -1998,7 +1994,8 @@ private function getTopHighlights() {
                   
 
                   // Enhanced form configurations
-  $formConfigs = [
+
+                  $formConfigs = [
 
                     'college' => [
 
@@ -2086,7 +2083,7 @@ private function getTopHighlights() {
 
                     ],
                     
-       'resource' => [
+'resource' => [
     'title' => 'Resource Analytics',
     'icon' => 'collection',
     'color' => 'info',
@@ -2108,8 +2105,8 @@ private function getTopHighlights() {
         //     'description' => 'User interaction with tools/resources'
         // ]
     ]
-   ],
-   'career' => [
+],
+'career' => [
     'title' => 'Career Analytics',
     'icon' => 'briefcase',
     'color' => 'primary',
@@ -2137,10 +2134,11 @@ private function getTopHighlights() {
         //     'description' => 'User comparing different careers'
         // ]
     ]
-   ],
+],
 
-  ];
-  ?>
+                ];
+
+                ?>
 
 
 
