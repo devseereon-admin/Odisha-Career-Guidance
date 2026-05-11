@@ -1,6 +1,8 @@
 <?php
-include "dbconn.php";
+session_start();
 
+include "dbconn.php";
+include "includes/audit_log.php";
 /* ---------- CONFIG ---------- */
 define('EN_DB', 'ama_career');
 $EN_DIR = '../upload/my-career/';
@@ -24,6 +26,12 @@ function checkAndCreateTable($conn)
     }
 }
 checkAndCreateTable($conn);
+saveAuditLog(
+    $conn,
+    "MY CAREER",
+    "VIEW",
+    "Viewed My Career Image Form"
+);
 
 /* ---------- FILE UPLOAD ---------- */
 function uploadFile($fileKey, $dir)
@@ -130,6 +138,12 @@ if (isset($_GET['delete_id'])) {
         if (file_exists($file)) unlink($file);
     }
 
+    saveAuditLog(
+    $conn,
+    "MY CAREER",
+    "DELETE",
+    "Deleted career image ID: " . $deleteId
+);
     deleteData($conn, $deleteId);
 
     header("Location: my-career-images.php");
@@ -155,6 +169,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['ajax_submit'])) {
 
         if ($image) {
             insertData($conn, $image, $priority);
+
+    saveAuditLog(
+        $conn,
+        "MY CAREER",
+        "INSERT",
+        "Added new career image: " . $image
+    );
             $response['success'] = true;
         } else {
             $response['message'] = "Upload failed!";
@@ -167,6 +188,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['ajax_submit'])) {
         $newImage = uploadFile('image', $EN_DIR);
 
         updateData($conn, $id, $newImage, $priority);
+
+           saveAuditLog(
+        $conn,
+        "MY CAREER",
+        "UPDATE",
+        "Updated career image ID: " . $id
+    );
 
         $response['success'] = true;
     }

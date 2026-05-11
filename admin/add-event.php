@@ -1,5 +1,13 @@
 <?php
+
+session_start();
+
 include "dbconn.php";
+include "includes/audit_log.php";
+
+if(empty($_SESSION['csrf_token'])){
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 
 /* ---------- SELECT DATABASE ---------- */
 mysqli_select_db($conn, "ama_career");
@@ -105,13 +113,31 @@ if (isset($_GET['delete_id'])) {
     mysqli_query($conn, "DELETE FROM event_images WHERE event_id='$deleteId'");
     mysqli_query($conn, "DELETE FROM events WHERE id='$deleteId'");
 
+    saveAuditLog(
+    $conn,
+    "Events",
+    "DELETE",
+    "Deleted event ID: ".$deleteId
+);
+
     header("Location: events-list.php");
     exit;
 }
 
 /* ---------- AJAX SAVE ---------- */
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['ajax_submit'])) {
-
+  
+if(
+        !isset($_POST['csrf_token']) ||
+        $_POST['csrf_token'] !== $_SESSION['csrf_token']
+    ){
+        echo json_encode([
+            'success' => false,
+            'message' => 'CSRF validation failed'
+        ]);
+        exit;
+    }
+    
     $res = ['success' => false];
 
     $id = $_POST['id'] ?? '';
@@ -162,6 +188,12 @@ $show_attendance = isset($_POST['show_attendance']) ? 1 : 0;
         VALUES('$event_name','$description','$location','$event_date','$newCover','$priority','$report','$youtube_link','$attendance_link','$show_youtube','$show_attendance')");
 
         $event_id = mysqli_insert_id($conn);
+         saveAuditLog(
+    $conn,
+    "Events",
+    "CREATE",
+    "Created event: ".$event_name
+);
     }
     /* ---------- UPDATE ---------- */ else {
 
@@ -201,6 +233,12 @@ mysqli_query($conn, "UPDATE events SET
 WHERE id='$id'");
 
         $event_id = $id;
+        saveAuditLog(
+    $conn,
+    "Events",
+    "UPDATE",
+    "Updated event ID: ".$id
+);
     }
     function getNextImagePriority($conn, $event_id)
     {
@@ -339,6 +377,8 @@ WHERE id='$id'");
                         <div class="content-body">
 
                             <form id="eventForm" enctype="multipart/form-data">
+                                <input type="hidden" name="csrf_token"
+                                  value="<?php echo $_SESSION['csrf_token']; ?>">
                                 <input type="hidden" name="ajax_submit" value="1">
                                 <input type="hidden" name="id" value="<?= $id ?>">
                                 <div class="form-group">

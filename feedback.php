@@ -1,6 +1,17 @@
 <?php
+session_start();
 
 include 'admin/dbconn.php';
+
+/* ---------------- CSRF TOKEN ---------------- */
+
+if (empty($_SESSION['csrf_token'])) {
+
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+
+}
+
+$csrf_token = $_SESSION['csrf_token'];
 
 ?>
 
@@ -142,7 +153,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 							<form action="feedback-save.php" method="POST" enctype="multipart/form-data" onsubmit="return validateFeedback();">
 
-                                <div class="row">
+                               <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
+							  <div class="row">
 
                                     
 
@@ -219,7 +231,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             </form>
 
                             
-
+<!--  -->
                             <script>
 
                             // FEEDBACK MESSAGE MUST BE REQUIRED

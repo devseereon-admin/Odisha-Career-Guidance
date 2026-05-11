@@ -3,7 +3,7 @@
 session_start();
 
 include('dbconn.php');
-
+include "includes/audit_log.php";
 
 
 function getUserIP() {
@@ -124,6 +124,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $_SESSION['admin_username'] = $username;
 
+        saveAuditLog(
+    $conn,
+    "Admin Login",
+    "LOGIN_SUCCESS",
+    "Admin logged in successfully: ".$username
+);
         header('Location: dashboard.php');
 
     } else {
@@ -152,6 +158,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $blocked_until = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
+            /* AUDIT LOG - IP BLOCKED */
+saveAuditLog(
+    $conn,
+    "Admin Login",
+    "IP_BLOCKED",
+    "IP blocked due to failed attempts: ".$user_ip
+);
+
             mysqli_query($conn, "UPDATE blocked_ips SET failed_attempts = $failed_attempts, blocked_until = '$blocked_until' WHERE ip_address = '$user_ip'");
 
             echo "<script>alert('Your IP is blocked due to multiple failed login attempts.');window.location.href='index.php'</script>";
@@ -159,6 +173,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
 
             mysqli_query($conn, "UPDATE blocked_ips SET failed_attempts = $failed_attempts WHERE ip_address = '$user_ip'");
+            saveAuditLog(
+    $conn,
+    "Admin Login",
+    "LOGIN_FAILED",
+    "Failed login attempt for username: ".$username." | IP: ".$user_ip
+);
 
             echo "<script>alert('Invalid credentials');window.location.href='index.php'</script>";
 
@@ -177,6 +197,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($failed_attempts >= 5) {
 
             $locked_until = date('Y-m-d H:i:s', strtotime('+3 hours'));
+             saveAuditLog(
+        $conn,
+        "Admin Login",
+        "ACCOUNT_LOCKED",
+        "Account locked for username: ".$username
+    );
 
         }
 

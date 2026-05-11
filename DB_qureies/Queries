@@ -194,3 +194,15 @@ ALTER TABLE events
 MODIFY event_name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci,
 MODIFY description TEXT CHARACTER SET utf8 COLLATE utf8_general_ci,
 MODIFY location VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+--date - 08.05.2026 --
+
+CREATE TABLE audit_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255),
+    module_name VARCHAR(255),
+    action_type VARCHAR(255),
+    activity_details TEXT,
+    ip_address VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

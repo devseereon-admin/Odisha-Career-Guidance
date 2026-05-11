@@ -1418,34 +1418,371 @@ while ($row = $scholarship_result->fetch_assoc()) {
 
                     
 
-                    public function getAllAnalyticsData() {
+ 
+public function getAllAnalyticsData()
+{
+    return [
 
-                        $data = [
+        // Main Analytics
+        'college'       => $this->getFormData('college'),
+        'examination'   => $this->getFormData('examination'),
+        'scholarship'   => $this->getFormData('scholarship'),
+        'weakness'      => $this->getFormData('weakness_follow'),
+        'resource'      => $this->getFormData('resource'),
+        'career'        => $this->getFormData('career'),
 
-                            'college' => $this->getFormData('college'),
+        // Totals
+        'totals'        => $this->getTotalStats(),
+        'all_data'      => $this->getAllFormData(),
+        'highlights'    => $this->getTopHighlights(),
 
-                            'examination' => $this->getFormData('examination'),
+        // =====================================
+        // 🌍 LOCATION ANALYTICS ALL MODULES
+        // =====================================
+        
+        'location_analytics' => [
 
-                            'scholarship' => $this->getFormData('scholarship'),
+            // COLLEGE
+            'college' => [
+                'institute' => $this->getLocationAnalyticsByModule(
+                    "page_url='college-chnge.php'",
+                    '$[0]'
+                ),
+                'domain' => $this->getLocationAnalyticsByModule(
+                    "page_url='college-chnge.php'",
+                    '$[1]'
+                ),
+                'state' => $this->getLocationAnalyticsByModule(
+                    "page_url='college-chnge.php'",
+                    '$[2]'
+                ),
+            ],
 
-                            'weakness' => $this->getFormData('weakness_follow'),
-                            'resource' => $this->getFormData('resource'),
-                            'career' => $this->getFormData('career'),
-                            'totals' => $this->getTotalStats(),
+            // EXAM
+            'examination' => [
+                'exam_type' => $this->getLocationAnalyticsByModule(
+                    "page_url='entrance-exams.php'",
+                    '$[0]'
+                ),
+                'qualification' => $this->getLocationAnalyticsByModule(
+                    "page_url='entrance-exams.php'",
+                    '$[1]'
+                ),
+                'location' => $this->getLocationAnalyticsByModule(
+                    "page_url='entrance-exams.php'",
+                    '$[2]'
+                ),
+            ],
 
-                            'all_data' => $this->getAllFormData(),
+            // SCHOLARSHIP
+            'scholarship' => [
+                'scholarship_type' => $this->getLocationAnalyticsByModule(
+                    "page_url='oldscholarships1.php'",
+                    '$[0]'
+                ),
+                'class' => $this->getLocationAnalyticsByModule(
+                    "page_url='oldscholarships1.php'",
+                    '$[1]'
+                ),
+            ],
 
-                            'highlights' => $this->getTopHighlights()
+            // WEAKNESS
+            'weakness' => [
+                'category' => $this->getLocationAnalyticsByModule(
+                    "page_url='understand_your_strength_weakness.php'",
+                    '$[0]'
+                ),
+                'selection' => $this->getLocationAnalyticsByModule(
+                    "page_url='understand_your_strength_weakness.php'",
+                    '$[1]'
+                ),
+            ],
 
-                        ];
+            // RESOURCE
+            'resource' => [
+                'videos' => $this->getLocationAnalyticsByModule(
+                    "parent_page='YouTube'",
+                    '$[2]'
+                ),
+                'articles' => $this->getLocationAnalyticsByModule(
+                    "LOWER(parent_page)='career collateral'",
+                    '$[1]'
+                ),
+                'tools' => $this->getLocationAnalyticsByModule(
+                    "page_url='resources.php'",
+                    '$[1]'
+                ),
+            ],
 
-                        
+            // CAREER
+            'career' => [
+                'career_paths' => $this->getLocationAnalyticsByModule(
+                    "parent_page='car1'",
+                    '$[1]'
+                ),
+                'career_details' => $this->getLocationAnalyticsByModule(
+                    "parent_page='car2'",
+                    '$[1]'
+                ),
+                'career_search' => $this->getLocationAnalyticsByModule(
+                    "parent_page='car3'",
+                    '$[1]'
+                ),
+            ],
+        ]
+    ];
+}
+ 
 
-                        return $data;
+private $ipCache = [];
+private function getLocationCached($ip) {
 
-                    }
+    if (empty($ip)) {
+        return "Unknown";
+    }
 
+    if ($ip == '::1') {
+        $ip = '8.8.8.8';
+    }
+
+    if (isset($this->ipCache[$ip])) {
+        return $this->ipCache[$ip];
+    }
+
+    $url = "http://ip-api.com/json/$ip";
+    $response = @file_get_contents($url);
+
+    if (!$response) {
+        return "Unknown";
+    }
+
+    $data = json_decode($response, true);
+
+    $location = ($data['country'] ?? 'Unknown') . ", " .
+                ($data['regionName'] ?? 'Unknown') . ", " .
+                ($data['city'] ?? 'Unknown');
+
+    $this->ipCache[$ip] = $location;
+
+    return $location;
+}
+
+private function getLocationAnalytics() {
+
+    $data = [];
+
+    $result = $this->conn->query("
+        SELECT ip_address FROM page_clicks
+    ");
+
+    while ($row = $result->fetch_assoc()) {
+
+        $location = $this->getLocationCached($row['ip_address']);
+
+        $data[] = $location;
+    }
+
+    return $data;
+}
+
+private function getExamLocationBreakdown() {
+
+    $temp = [];
+    $data = [];
+
+    $result = $this->conn->query("
+        SELECT 
+            JSON_UNQUOTE(JSON_EXTRACT(page_flow, '$[0]')) AS exam_type,
+            ip_address
+        FROM page_clicks
+        WHERE page_url = 'entrance-exams.php'
+    ");
+
+    while ($row = $result->fetch_assoc()) {
+
+        if (empty($row['exam_type']) || empty($row['ip_address'])) {
+            continue;
+        }
+
+        $examType = $row['exam_type'];
+        $location = $this->getLocationCached($row['ip_address']);
+
+        $key = $examType . " - " . $location;
+
+        if (!isset($temp[$key])) {
+            $temp[$key] = 0;
+        }
+
+        $temp[$key]++;
+    }
+
+    // ✅ Convert to UI format
+    foreach ($temp as $name => $count) {
+        $data['location'][] = [
+            'name' => $name,
+            'clicks' => $count,
+            'highlight' => $this->isHighlight($count)
+        ];
+    }
+
+    return $data;
+}
+// ===============================
+// ✅ ADD THIS NEW FUNCTION
+// ===============================
+private function getLocationAnalyticsByModule($where, $jsonIndex)
+{
+    $temp = [];
+    $data = [];
+
+    $query = "
+        SELECT 
+            JSON_UNQUOTE(JSON_EXTRACT(page_flow, '$jsonIndex')) AS item_name,
+            ip_address
+        FROM page_clicks
+        WHERE $where
+    ";
+
+    $result = $this->conn->query($query);
+
+    while ($row = $result->fetch_assoc()) {
+
+        if (empty($row['item_name'])) continue;
+
+        $location = $this->getLocationCached($row['ip_address']);
+
+        $key = $row['item_name'] . " - " . str_replace(",", " -", $location);
+
+        if (!isset($temp[$key])) {
+            $temp[$key] = 0;
+        }
+
+        $temp[$key]++;
+    }
+
+    foreach ($temp as $name => $count) {
+        $data[] = [
+            'name' => $name,
+            'clicks' => $count,
+            'highlight' => $this->isHighlight($count)
+        ];
+    }
+
+    return $data;
+}
+private function getLocationAnalyticsAllSections()
+{
+    return [
+
+        // =========================
+        // 🎓 COLLEGE
+        // =========================
+        'college' => [
+            'institute' => $this->getLocationAnalyticsByModule(
+                "page_url='college-chnge.php'",
+                '$[0]'
+            ),
+            'domain' => $this->getLocationAnalyticsByModule(
+                "page_url='college-chnge.php'",
+                '$[1]'
+            ),
+            'state' => $this->getLocationAnalyticsByModule(
+                "page_url='college-chnge.php'",
+                '$[2]'
+            ),
+        ],
+
+        // =========================
+        // 📝 EXAMINATION
+        // =========================
+        'examination' => [
+            'exam_type' => $this->getLocationAnalyticsByModule(
+                "page_url='entrance-exams.php'",
+                '$[0]'
+            ),
+            'qualification' => $this->getLocationAnalyticsByModule(
+                "page_url='entrance-exams.php'",
+                '$[1]'
+            ),
+            'location' => $this->getLocationAnalyticsByModule(
+                "page_url='entrance-exams.php'",
+                '$[2]'
+            ),
+        ],
+
+        // =========================
+        // 💰 SCHOLARSHIP
+        // =========================
+        'scholarship' => [
+            'scholarship_type' => $this->getLocationAnalyticsByModule(
+                "page_url='oldscholarships1.php'",
+                '$[0]'
+            ),
+            'class' => $this->getLocationAnalyticsByModule(
+                "page_url='oldscholarships1.php'",
+                '$[1]'
+            ),
+        ],
+
+        // =========================
+        // ❤️ WEAKNESS
+        // =========================
+        'weakness' => [
+            'category' => $this->getLocationAnalyticsByModule(
+                "page_url='understand_your_strength_weakness.php'",
+                '$[0]'
+            ),
+            'selection' => $this->getLocationAnalyticsByModule(
+                "page_url='understand_your_strength_weakness.php'",
+                '$[1]'
+            ),
+        ],
+
+        // =========================
+        // 🎥 RESOURCE
+        // =========================
+        'resource' => [
+            'type' => $this->getLocationAnalyticsByModule(
+                "page_url='resources.php'",
+                '$[0]'
+            ),
+            'item' => $this->getLocationAnalyticsByModule(
+                "page_url='resources.php'",
+                '$[1]'
+            ),
+            'subitem' => $this->getLocationAnalyticsByModule(
+                "page_url='resources.php'",
+                '$[2]'
+            ),
+        ],
+
+        // =========================
+        // 💼 CAREER
+        // =========================
+        'career' => [
+            'stream' => $this->getLocationAnalyticsByModule(
+                "parent_page='careers'",
+                '$[0]'
+            ),
+            'career_paths' => $this->getLocationAnalyticsByModule(
+                "parent_page='car1'",
+                '$[1]'
+            ),
+            'career_details' => $this->getLocationAnalyticsByModule(
+                "parent_page='car2'",
+                '$[1]'
+            ),
+            'career_search' => $this->getLocationAnalyticsByModule(
+                "parent_page='car3'",
+                '$[1]'
+            ),
+        ],
+
+    ];
+}
  private function getFormData($formType) {
+
+ 
 
     $data = [];
 
@@ -1518,6 +1855,7 @@ while ($row = $scholarship_result->fetch_assoc()) {
                     $data[$type][] = [
                         'name' => $row['name'],
                         'clicks' => $row['total_clicks'],
+
                         'highlight' => $this->isHighlight($row['total_clicks'])
                     ];
                 }
@@ -1586,7 +1924,7 @@ while ($row = $scholarship_result->fetch_assoc()) {
     GROUP BY name
     ORDER BY total_clicks DESC
     ");
- while ($row = $result->fetch_assoc()) {
+   while ($row = $result->fetch_assoc()) {
 
             if (!empty($row['name'])) {
                 $data[$parent][] = [
@@ -1601,7 +1939,7 @@ while ($row = $scholarship_result->fetch_assoc()) {
 
     return $data;
   }
- if ($formType === 'resource') {
+  if ($formType === 'resource') {
 
     // ============================
     // 🎥 YOUTUBE (INDEX 2)
@@ -1639,7 +1977,7 @@ while ($row = $scholarship_result->fetch_assoc()) {
     AND TRIM(LOWER(JSON_UNQUOTE(JSON_EXTRACT(page_flow, '$[0]')))) = 'career collateral'
     GROUP BY name
     ORDER BY total_clicks DESC
- ");
+  ");
 
     while ($row = $result->fetch_assoc()) {
         if (!empty($row['name'])) {
@@ -1676,9 +2014,9 @@ while ($row = $scholarship_result->fetch_assoc()) {
     }
 
     return $data;
-}
+  }
 
-if ($formType === 'career') {
+  if ($formType === 'career') {
 
     // ============================
     // 🎓 CAREER PATH (FLOW)
@@ -1750,7 +2088,7 @@ if ($formType === 'career') {
     }
 
     return $data;
-}
+  }
     // ✅ DEFAULT (unchanged)
      $result = $this->conn->query("
         SELECT click_type, item_name, SUM(click_count) as total_clicks
@@ -1995,7 +2333,7 @@ private function getTopHighlights() {
 
                   // Enhanced form configurations
 
-                  $formConfigs = [
+  $formConfigs = [
 
                     'college' => [
 
@@ -2083,7 +2421,7 @@ private function getTopHighlights() {
 
                     ],
                     
-'resource' => [
+                  'resource' => [
     'title' => 'Resource Analytics',
     'icon' => 'collection',
     'color' => 'info',
@@ -2105,38 +2443,38 @@ private function getTopHighlights() {
         //     'description' => 'User interaction with tools/resources'
         // ]
     ]
-],
-'career' => [
-    'title' => 'Career Analytics',
-    'icon' => 'briefcase',
-    'color' => 'primary',
-    'bg_color' => '#cce5ff',
-    'sections' => [
-        'career_paths' => [
+                   ],
+         'career' => [
+           'title' => 'Career Analytics',
+           'icon' => 'briefcase',
+           'color' => 'primary',
+           'bg_color' => '#cce5ff',
+           'sections' => [
+            'career_paths' => [
             'title' => 'Stream',
             'icon' => 'map',
             'description' => 'User interaction with career journeys'
-        ],
-        'career_details' => [
-            'title' => 'Career Details',
-            'icon' => 'info-circle',
-            'description' => 'User interaction with career detail pages'
-        ],
-        'career_search' => [
+                  ],
+              'career_details' => [
+              'title' => 'Career Details',
+              'icon' => 'info-circle',
+             'description' => 'User interaction with career detail pages'
+              ],
+            'career_search' => [
             'title' => 'Career Search',
             'icon' => 'search',
             'description' => 'User search and discovery of careers'
-        ],
-        // Optional
-        // 'career_compare' => [
-        //     'title' => 'Career Compare',
-        //     'icon' => 'shuffle',
-        //     'description' => 'User comparing different careers'
-        // ]
-    ]
-],
+          ],
+           // Optional
+           // 'career_compare' => [
+           //     'title' => 'Career Compare',
+           //     'icon' => 'shuffle',
+           //     'description' => 'User comparing different careers'
+          // ]
+            ]
+         ],
 
-                ];
+ ];
 
                 ?>
 

@@ -49,7 +49,7 @@
 
 		setTimeout(function () {
 
-		$("#myModal").modal('show');
+		$("#mymodal").modal('show');
 
          }, 1000);
 
@@ -1109,7 +1109,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 </div>
 
-                <!--<button type="button" class="close" data-dismiss="modal">×</button>-->
+                <!-- <button type="button" class="close" data-dismiss="modal">×</button> -->
 
             </div>
 
@@ -1574,7 +1574,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 			<div class="container">
 
 				<h1 class="heading-one1">OUR CAREERS</h1>
-
+               
 				<div class="row">
 
 					

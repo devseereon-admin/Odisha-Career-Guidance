@@ -110,10 +110,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 				<nav class="navbar navbar-expand-sm navbar-dark">
 			      	<div class="d-flex language">
 			      	<div class="language-en">
-			      		<a href="index.html" class="language-eng">English</a>
+			      		<a href="draw-your-future.php" class="language-eng">English</a>
 			      	</div>
 			        <div class="language-od">
-			        <a href="od/index.php" class="language-odia">ଓଡିଆ</a>
+			        <a href="od/draw-your-future.php" class="language-odia">ଓଡିଆ</a>
 			      	</div>
 			      	</div>
 				</nav> 
